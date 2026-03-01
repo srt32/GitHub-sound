@@ -276,33 +276,6 @@ let cdTimer   = null;
 let pollsec   = 30;
 let activeSpeakCard = null;
 
-// ── Dev pool ──────────────────────────────────────────────────────────────
-// Bootstrap from global /events, then rotate through individual dev feeds.
-const DEV_POOL_SIZE = 10;
-let devPool    = [];  // logins of active devs
-let devPoolIdx = 0;   // round-robin cursor
-
-function addToDevPool(login) {
-  if (!login || isBot(login) || devPool.includes(login)) return;
-  if (devPool.length >= DEV_POOL_SIZE) devPool.shift();
-  devPool.push(login);
-}
-
-function nextFetchUrl() {
-  if (devPool.length < DEV_POOL_SIZE) {
-    // Still bootstrapping — hit global feed
-    return null;
-  }
-  const login = devPool[devPoolIdx];
-  devPoolIdx++;
-  if (devPoolIdx >= devPool.length) {
-    devPoolIdx = 0;
-    devPool    = [];   // full cycle done — re-bootstrap next round
-    lastEtag   = null;
-  }
-  return `https://api.github.com/users/${encodeURIComponent(login)}/events?per_page=15`;
-}
-
 // ── Token ──────────────────────────────────────────────────────────────────
 const getToken  = () => localStorage.getItem('gh_token') || '';
 function saveToken() {
@@ -677,17 +650,13 @@ async function fetchEvents() {
   if (paused) return;
   clearInterval(cdTimer);
 
-  const token     = getToken();
-  const headers   = { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
-  if (token) headers.Authorization = `token ${token}`;
-
-  const devUrl    = nextFetchUrl();
-  const url       = devUrl ?? 'https://api.github.com/events?per_page=30';
-  const bootstrap = !devUrl;
-  if (bootstrap && lastEtag) headers['If-None-Match'] = lastEtag;
+  const token   = getToken();
+  const headers = { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
+  if (token)    headers.Authorization = `token ${token}`;
+  if (lastEtag) headers['If-None-Match'] = lastEtag;
 
   try {
-    const res = await fetch(url, { headers });
+    const res = await fetch('https://api.github.com/events?per_page=30', { headers });
 
     const rem = res.headers.get('X-RateLimit-Remaining');
     const lim = res.headers.get('X-RateLimit-Limit');
@@ -698,10 +667,8 @@ async function fetchEvents() {
     pollMs = secs * 1_000;
     pollsec = secs;
 
-    if (bootstrap) {
-      const etag = res.headers.get('ETag');
-      if (etag) lastEtag = etag;
-    }
+    const etag = res.headers.get('ETag');
+    if (etag) lastEtag = etag;
 
     if (res.status === 304) {
       setStatus('No new events');
@@ -714,16 +681,11 @@ async function fetchEvents() {
       );
     } else {
       const events = await res.json();
-      const who = devUrl ? url.split('/users/')[1].split('/')[0] : 'global';
-      setStatus(`Live · ${who} · ${new Date().toLocaleTimeString()}`);
+      setStatus(`Live · ${new Date().toLocaleTimeString()}`);
 
       for (const ev of events) {
         if (seenIds.has(ev.id)) continue;
         seenIds.add(ev.id);
-
-        // Populate dev pool from global bootstrap feed
-        if (bootstrap) addToDevPool(ev.actor?.login);
-
         const parsed = parseEvent(ev);
         if (!parsed) continue;
         evtTotal++;
@@ -757,7 +719,7 @@ function schedulePoll() {
 
 function restart() {
   clearTimeout(pollTimer); clearInterval(cdTimer);
-  lastEtag = null; devPool = []; devPoolIdx = 0;
+  lastEtag = null;
   fetchEvents();
 }
 
