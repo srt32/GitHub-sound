@@ -360,129 +360,28 @@ const isBot = (login) => !login ||
   login.endsWith('[bot]') || login.includes('dependabot') ||
   login.includes('renovate') || login.endsWith('-bot');
 
-// ── Event templates ────────────────────────────────────────────────────────
-const PUSH_INTROS    = ['committed:', 'pushed:', 'added:', 'merged:'];
-const ISSUE_INTROS   = ['opened an issue:', 'filed:', 'reported:'];
-const COMMENT_INTROS = ['commented:', 'replied:', 'noted:'];
-const PR_INTROS      = ['opened a PR:', 'proposed:', 'submitted:'];
-
+const PR_INTROS = ['opened a PR:', 'proposed:', 'submitted:'];
 const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 
 // ── Event parsing ──────────────────────────────────────────────────────────
 function parseEvent(ev) {
-  if (isBot(ev.actor?.login)) return null;
+  if (ev.type !== 'PullRequestEvent') return null;
+  if (ev.payload?.action !== 'opened')  return null;
+  if (isBot(ev.actor?.login))           return null;
 
-  const actor   = ev.actor?.display_login || ev.actor?.login || 'someone';
-  const repo    = ev.repo?.name || '';
-  const payload = ev.payload || {};
-  const type    = ev.type;
-  let   badge   = 'other';
-  let   summary = '';
-  const texts   = [];
+  const actor = ev.actor?.display_login || ev.actor?.login || 'someone';
+  const repo  = ev.repo?.name || '';
+  const pr    = ev.payload?.pull_request || {};
+  const title = clean(pr.title || '');
+  const body  = words(clean(pr.body  || ''), 25);
+  const texts = [];
 
-  switch (type) {
+  if (title) texts.push({ speech: `${actor} ${pick(PR_INTROS)} ${title}`, display: title });
+  if (body)  texts.push({ speech: body, display: body });
 
-    case 'PushEvent': {
-      badge = 'push';
-      const commits = (payload.commits || [])
-        .filter(c => c.distinct !== false && c.message && !/^merge\b/i.test(c.message));
-      for (const c of commits.slice(0, 3)) {
-        const msg = clean(c.message.split('\n')[0]);
-        if (msg.length > 3)
-          texts.push({ speech: `${actor} ${pick(PUSH_INTROS)} ${msg}`, display: msg });
-      }
-      const n = payload.commits?.length ?? 0;
-      summary = n === 1
-        ? commits[0]?.message?.split('\n')[0] || 'pushed a commit'
-        : `pushed ${n} commit${n !== 1 ? 's' : ''}`;
-      break;
-    }
-
-    case 'IssuesEvent': {
-      badge = 'issue';
-      const issue = payload.issue || {};
-      if (payload.action === 'opened') {
-        const title = clean(issue.title || '');
-        const body  = words(clean(issue.body || ''), 25);
-        if (title) texts.push({ speech: `${actor} ${pick(ISSUE_INTROS)} ${title}`, display: title });
-        if (body)  texts.push({ speech: body, display: body });
-      }
-      summary = `${payload.action} issue: ${payload.issue?.title || ''}`;
-      break;
-    }
-
-    case 'IssueCommentEvent': {
-      badge = 'comment';
-      if (payload.action === 'created') {
-        const body  = words(clean(payload.comment?.body || ''), 25);
-        const title = payload.issue?.title || '';
-        if (body) texts.push({
-          speech:  `${actor} ${pick(COMMENT_INTROS)} ${body}`,
-          display: body,
-        });
-        summary = `commented on: ${title}`;
-      }
-      break;
-    }
-
-    case 'PullRequestEvent': {
-      badge = 'pr';
-      const pr     = payload.pull_request || {};
-      const action = payload.action;
-      if (['opened', 'reopened'].includes(action)) {
-        const title = clean(pr.title || '');
-        const body  = words(clean(pr.body || ''), 25);
-        if (title) texts.push({ speech: `${actor} ${pick(PR_INTROS)} ${title}`, display: title });
-        if (body)  texts.push({ speech: body, display: body });
-      } else if (action === 'closed' && pr.merged) {
-        const title = clean(pr.title || '');
-        if (title) texts.push({ speech: `${actor} merged: ${title}`, display: title });
-      }
-      summary = `${action} PR: ${pr.title || ''}`;
-      break;
-    }
-
-    case 'PullRequestReviewCommentEvent': {
-      badge = 'comment';
-      if (payload.action === 'created') {
-        const body = words(clean(payload.comment?.body || ''), 25);
-        if (body) texts.push({ speech: `${actor} reviewed: ${body}`, display: body });
-        summary = 'left a review comment';
-      }
-      break;
-    }
-
-    case 'CreateEvent': {
-      badge = 'create';
-      const refType = payload.ref_type;
-      const desc    = words(clean(payload.description || ''), 20);
-      summary = payload.ref ? `created ${refType} ${payload.ref}` : `created ${refType}`;
-      if (refType === 'repository' && desc)
-        texts.push({ speech: `${actor} created a new repo: ${desc}`, display: desc });
-      break;
-    }
-
-    case 'ReleaseEvent': {
-      badge = 'release';
-      const rel  = payload.release || {};
-      const name = rel.name || rel.tag_name || '';
-      const body = words(clean(rel.body || ''), 20);
-      if (name) texts.push({ speech: `${actor} released ${name}`, display: name });
-      if (body) texts.push({ speech: body, display: body });
-      summary = `released ${name}`;
-      break;
-    }
-
-    case 'WatchEvent':
-    case 'ForkEvent':
-      return null;
-
-    default:
-      return null;
-  }
-
-  if (texts.length === 0) return null;  // nothing to read aloud — skip
-  return { actor, repo, type, badge, summary, texts, time: ev.created_at };
+  if (texts.length === 0) return null;
+  return { actor, repo, type: 'PullRequestEvent', badge: 'pr',
+           summary: `opened PR: ${title}`, texts, time: ev.created_at };
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -499,13 +398,6 @@ function reltime(iso) {
   return `${Math.floor(mins / 60)}h ago`;
 }
 
-const BADGE_LABELS = {
-  PushEvent: 'push', IssuesEvent: 'issue',
-  IssueCommentEvent: 'comment', PullRequestEvent: 'PR',
-  PullRequestReviewCommentEvent: 'review',
-  CreateEvent: 'create', ReleaseEvent: 'release',
-};
-
 // ── Add event card ─────────────────────────────────────────────────────────
 function addCard(parsed, ev) {
   const feed = document.getElementById('feed');
@@ -514,7 +406,7 @@ function addCard(parsed, ev) {
   const login    = ev.actor?.login ?? '';
   const avatar   = `https://avatars.githubusercontent.com/${encodeURIComponent(login)}?size=64`;
   const fallback = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"><rect width="26" height="26" rx="13" fill="%23e2e2e2"/><text x="13" y="18" text-anchor="middle" font-size="12" fill="%23999">${encodeURIComponent((parsed.actor[0]||'?').toUpperCase())}</text></svg>`;
-  const label    = BADGE_LABELS[parsed.type] || parsed.type.replace('Event','');
+  const label    = 'PR';
 
   const displayText = parsed.texts.length
     ? parsed.texts.map(t => escHtml(t.display)).join(' · ')
