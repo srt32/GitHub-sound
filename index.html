@@ -265,7 +265,7 @@
 let muted     = false;
 let paused    = false;
 let speaking  = false;
-let pollMs    = 30_000;
+let pollMs    = 10_000;
 let lastEtag  = null;
 let seenIds   = new Set();
 let queue     = [];
@@ -663,9 +663,8 @@ async function fetchEvents() {
     if (rem !== null)
       document.getElementById('rateLimit').textContent = `${rem}/${lim}`;
 
-    const secs = parseInt(res.headers.get('X-Poll-Interval') || '30', 10);
-    pollMs = secs * 1_000;
-    pollsec = secs;
+    pollMs  = 10_000;
+    pollsec = 10;
 
     const etag = res.headers.get('ETag');
     if (etag) lastEtag = etag;
