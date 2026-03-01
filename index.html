@@ -481,6 +481,7 @@ function parseEvent(ev) {
       return null;
   }
 
+  if (texts.length === 0) return null;  // nothing to read aloud — skip
   return { actor, repo, type, badge, summary, texts, time: ev.created_at };
 }
 
@@ -674,8 +675,8 @@ async function fetchEvents() {
     } else if (!res.ok) {
       setStatus(
         res.status === 403
-          ? 'Rate limited — add a token for more quota'
-          : `API error: ${res.status}`,
+          ? 'Rate limit reached — add a token for higher quota'
+          : `GitHub returned ${res.status} — will retry`,
         true
       );
     } else {
@@ -698,7 +699,7 @@ async function fetchEvents() {
     }
   } catch (err) {
     if (err.name !== 'AbortError')
-      setStatus(`Error: ${err.message}`, true);
+      setStatus(`Network error — ${err.message}`, true);
   }
 
   schedulePoll();
