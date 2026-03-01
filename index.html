@@ -3,47 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GitHub Sound 🎙️ — the world codes, we narrate!</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <title>GitHub Sound — the world codes, we narrate</title>
   <style>
     :root {
-      --bg:        #fff9f0;
-      --surface:   #ffffff;
-      --border:    #e8e0d5;
-      --text:      #2d2d2d;
-      --muted:     #888;
-      --purple:    #7c5cbf;
-      --coral:     #ff6b6b;
-      --teal:      #26c6a6;
-      --yellow:    #f7c948;
-      --sky:       #4fc3f7;
-      --pink:      #f06292;
-      --lime:      #aed55b;
-      --orange:    #ff8c42;
-      --radius:    14px;
+      --bg:      #f7f7f7;
+      --surface: #ffffff;
+      --border:  #e2e2e2;
+      --text:    #111111;
+      --muted:   #999999;
+      --radius:  5px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background: var(--bg);
-      background-image:
-        radial-gradient(circle at 10% 20%, rgba(124,92,191,.06) 0%, transparent 50%),
-        radial-gradient(circle at 90% 80%, rgba(255,107,107,.06) 0%, transparent 50%);
       color: var(--text);
-      font-family: 'Nunito', system-ui, sans-serif;
+      font-family: system-ui, -apple-system, sans-serif;
       height: 100dvh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      font-size: 14px;
     }
 
-    /* ── Header ──────────────────────────────────────────────────────────── */
+    /* ── Header ── */
     header {
       background: var(--surface);
-      border-bottom: 2px solid var(--border);
+      border-bottom: 1px solid var(--border);
       padding: 10px 16px;
       display: flex;
       align-items: center;
@@ -53,247 +40,175 @@
     }
 
     .logo {
-      font-size: 1.15rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, var(--purple), var(--coral));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-size: .9rem;
+      font-weight: 600;
+      letter-spacing: -.01em;
+      color: var(--text);
       white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
-    .logo-emoji { font-size: 1.3rem; -webkit-text-fill-color: initial; }
 
-    /* ── Wave ──────────────────────────────────────────────────────────────── */
-    .wave { display: flex; align-items: center; gap: 3px; height: 22px; }
+    /* ── Wave ── */
+    .wave { display: flex; align-items: center; gap: 2px; height: 14px; }
     .wave span {
-      display: block; width: 4px; height: 4px;
-      background: var(--purple); border-radius: 3px;
+      display: block; width: 2px; height: 2px;
+      background: var(--muted); border-radius: 1px;
     }
-    .wave.active span { animation: waveup 0.85s ease-in-out infinite; }
+    .wave.active span { animation: waveup .85s ease-in-out infinite; }
     .wave span:nth-child(1){animation-delay:.00s}
     .wave span:nth-child(2){animation-delay:.13s}
     .wave span:nth-child(3){animation-delay:.26s}
     .wave span:nth-child(4){animation-delay:.19s}
     .wave span:nth-child(5){animation-delay:.06s}
-    @keyframes waveup { 0%,100%{height:4px} 50%{height:20px} }
+    @keyframes waveup { 0%,100%{height:2px} 50%{height:12px} }
 
-    /* ── Controls ──────────────────────────────────────────────────────────── */
-    .controls { display:flex; align-items:center; gap:7px; margin-left:auto; flex-wrap:wrap; }
+    /* ── Controls ── */
+    .controls { display:flex; align-items:center; gap:6px; margin-left:auto; flex-wrap:wrap; }
     .token-wrap { display:flex; align-items:center; gap:5px; }
-    .token-wrap label { font-size:.73rem; color:var(--muted); white-space:nowrap; font-weight:600; }
+    .token-wrap label { font-size:.72rem; color:var(--muted); white-space:nowrap; }
 
     input[type="password"] {
       background: var(--bg);
-      border: 2px solid var(--border);
+      border: 1px solid var(--border);
       color: var(--text);
-      padding: 5px 9px;
-      border-radius: 10px;
-      font-size: .78rem;
+      padding: 4px 8px;
+      border-radius: var(--radius);
+      font-size: .75rem;
       font-family: inherit;
-      width: 165px;
+      width: 160px;
     }
-    input:focus { outline:none; border-color: var(--purple); }
+    input:focus { outline: none; border-color: var(--text); }
 
     button {
       background: var(--surface);
-      border: 2px solid var(--border);
+      border: 1px solid var(--border);
       color: var(--text);
-      padding: 5px 12px;
-      border-radius: 10px;
+      padding: 4px 10px;
+      border-radius: var(--radius);
       cursor: pointer;
-      font-size: .8rem;
+      font-size: .75rem;
       font-family: inherit;
-      font-weight: 700;
+      font-weight: 500;
       white-space: nowrap;
-      transition: transform .1s, background .15s;
+      transition: background .1s;
     }
-    button:hover  { background: var(--border); transform: scale(1.05); }
-    button:active { transform: scale(.95); }
-    button.on     { background: var(--coral); border-color: var(--coral); color: #fff; }
+    button:hover { background: var(--bg); }
+    button.on    { background: var(--text); color: var(--surface); border-color: var(--text); }
 
-    /* ── Status strip ──────────────────────────────────────────────────────── */
+    /* ── Status strip ── */
     .statusbar {
-      background: linear-gradient(90deg, rgba(124,92,191,.08), rgba(255,107,107,.08));
-      border-bottom: 2px solid var(--border);
-      padding: 5px 16px;
-      font-size: .72rem;
+      border-bottom: 1px solid var(--border);
+      padding: 4px 16px;
+      font-size: .68rem;
       color: var(--muted);
-      display: flex; gap: 16px; align-items: center; flex-shrink: 0; flex-wrap: wrap;
-      font-weight: 600;
+      display: flex; gap: 14px; align-items: center; flex-shrink: 0; flex-wrap: wrap;
     }
     .dot {
-      display:inline-block; width:8px; height:8px; border-radius:50%;
-      background: var(--teal); margin-right:5px;
-      animation: blink 2s ease-in-out infinite;
+      display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+      background: #22c55e; margin-right: 4px; vertical-align: middle;
     }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-    /* ── Karaoke stage ─────────────────────────────────────────────────────── */
+    /* ── Karaoke stage ── */
     .stage {
-      background: linear-gradient(135deg, #1a0533 0%, #0d1b2a 100%);
-      border-bottom: 3px solid #000;
-      padding: 18px 20px;
+      background: #111;
+      border-bottom: 1px solid #000;
+      padding: 16px 20px;
       flex-shrink: 0;
-      min-height: 100px;
+      min-height: 88px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      position: relative;
-      overflow: hidden;
+      gap: 6px;
     }
-    /* disco shimmer */
-    .stage::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(90deg,
-        transparent 0%, rgba(255,255,255,.03) 50%, transparent 100%);
-      animation: shimmer 3s linear infinite;
-    }
-    @keyframes shimmer { from{transform:translateX(-100%)} to{transform:translateX(100%)} }
 
     .stage-label {
-      font-size: .65rem;
-      font-weight: 900;
-      letter-spacing: .12em;
+      font-size: .58rem;
+      font-weight: 500;
+      letter-spacing: .1em;
       text-transform: uppercase;
-      color: rgba(255,255,255,.35);
+      color: rgba(255,255,255,.25);
     }
 
     .karaoke-text {
-      font-size: clamp(1.1rem, 3vw, 1.7rem);
-      font-weight: 900;
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      font-weight: 500;
       line-height: 1.5;
       text-align: center;
-      color: rgba(255,255,255,.55);
+      color: rgba(255,255,255,.4);
       max-width: 90vw;
       word-break: break-word;
-      position: relative;
-      z-index: 1;
     }
 
-    .kw { /* karaoke word */
-      display: inline-block;
-      transition: color .08s, transform .08s;
-    }
-    .kw.lit {
-      color: var(--yellow);
-      transform: scale(1.18);
-      text-shadow: 0 0 18px rgba(247,201,72,.7);
-      animation: pop .15s ease;
-    }
-    @keyframes pop {
-      0%  { transform: scale(1.35); }
-      100%{ transform: scale(1.18); }
-    }
-    .kw.said { color: rgba(255,255,255,.7); }
+    .kw { display: inline-block; transition: color .08s; }
+    .kw.lit  { color: #ffffff; }
+    .kw.said { color: rgba(255,255,255,.6); }
 
     .idle-msg {
-      color: rgba(255,255,255,.28);
-      font-size: 1rem;
-      font-weight: 700;
+      color: rgba(255,255,255,.2);
+      font-size: .9rem;
       font-style: italic;
     }
 
-    /* ── Event feed ─────────────────────────────────────────────────────────── */
+    /* ── Event feed ── */
     .feed {
       flex: 1;
       overflow-y: auto;
-      padding: 10px 12px;
+      padding: 8px 12px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 5px;
     }
-    .feed::-webkit-scrollbar { width: 6px; }
-    .feed::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .feed::-webkit-scrollbar { width: 4px; }
+    .feed::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
     .empty-state {
       text-align: center;
       color: var(--muted);
       padding: 50px 20px;
-      font-size: .95rem;
+      font-size: .88rem;
       line-height: 1.8;
     }
-    .empty-state h2 { font-size: 1.6rem; font-weight: 900; margin-bottom: 8px; }
+    .empty-state h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 6px; }
 
-    /* ── Event card ─────────────────────────────────────────────────────────── */
+    /* ── Event card ── */
     .card {
       background: var(--surface);
-      border: 2px solid var(--border);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 10px 12px;
+      padding: 8px 10px;
       display: flex;
-      gap: 10px;
-      animation: bounceIn .35s cubic-bezier(.34,1.56,.64,1);
-      position: relative;
+      gap: 9px;
     }
-    .card.speaking {
-      border-color: var(--yellow);
-      box-shadow: 0 0 0 2px rgba(247,201,72,.25), 0 4px 18px rgba(247,201,72,.15);
-      animation: rainbow-border 2s linear infinite;
-    }
-    @keyframes bounceIn {
-      from { opacity:0; transform: translateY(-14px) scale(.95); }
-      to   { opacity:1; transform: none; }
-    }
-    @keyframes rainbow-border {
-      0%   { border-color: #ff6b6b; }
-      25%  { border-color: var(--yellow); }
-      50%  { border-color: var(--teal); }
-      75%  { border-color: var(--purple); }
-      100% { border-color: #ff6b6b; }
-    }
+    .card.speaking { border-color: var(--text); }
 
     .card-left {
-      display: flex; flex-direction: column; align-items: center; gap: 5px; flex-shrink: 0;
+      display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0;
     }
     .avatar {
-      width: 32px; height: 32px; border-radius: 50%;
+      width: 26px; height: 26px; border-radius: 50%;
       background: var(--border); object-fit: cover;
-      border: 2px solid transparent;
     }
-    .card.speaking .avatar { border-color: var(--yellow); }
 
     .badge {
-      font-size: .6rem; padding: 2px 6px; border-radius: 20px;
-      font-weight: 900; white-space: nowrap; letter-spacing: .03em;
+      font-size: .57rem; padding: 1px 4px; border-radius: 3px;
+      font-weight: 500; white-space: nowrap;
+      color: var(--muted); background: var(--bg); border: 1px solid var(--border);
     }
-    .b-push    { background:#d4f5dc; color:#1a7f3c; }
-    .b-issue   { background:#fde8f5; color:#c2185b; }
-    .b-pr      { background:#ede7ff; color:#6200ea; }
-    .b-comment { background:#fff8e1; color:#f57f17; }
-    .b-create  { background:#e3f2fd; color:#0277bd; }
-    .b-release { background:#fce4ec; color:#c62828; }
-    .b-other   { background:#f5f5f5; color:#666; }
 
-    .card-body  { flex:1; min-width:0; }
-    .card-meta  { display:flex; align-items:center; gap:6px; margin-bottom:3px; flex-wrap:wrap; }
-    .actor      { font-weight:800; font-size:.8rem; color:var(--purple); }
-    .repo       { font-size:.72rem; color:var(--muted); }
-    .ts         { font-size:.68rem; color:var(--muted); margin-left:auto; }
-    .card-text  { font-size:.8rem; color:var(--text); line-height:1.45; word-break:break-word; font-weight:600; }
-    .card-text.dim { color:var(--muted); font-style:italic; font-weight:400; }
-
-    /* ── Fun reaction emojis on cards ─────────────────────────────────────── */
-    .card-reaction {
-      position: absolute; top: -8px; right: 10px;
-      font-size: 1.1rem; animation: floatUp .4s ease .1s both;
-    }
-    @keyframes floatUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+    .card-body  { flex: 1; min-width: 0; }
+    .card-meta  { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; flex-wrap: wrap; }
+    .actor      { font-weight: 600; font-size: .77rem; color: var(--text); }
+    .repo       { font-size: .69rem; color: var(--muted); }
+    .ts         { font-size: .66rem; color: var(--muted); margin-left: auto; }
+    .card-text  { font-size: .77rem; color: var(--text); line-height: 1.4; word-break: break-word; }
+    .card-text.dim { color: var(--muted); font-style: italic; }
   </style>
 </head>
 <body>
 
-<!-- ── Header ──────────────────────────────────────────────────────────────── -->
+<!-- ── Header ── -->
 <header>
-  <div class="logo">
-    <span class="logo-emoji">🎙️</span>
-    GitHub Sound
-  </div>
+  <div class="logo">GitHub Sound</div>
 
   <div class="wave" id="wave">
     <span></span><span></span><span></span><span></span><span></span>
@@ -301,44 +216,44 @@
 
   <div class="controls">
     <div class="token-wrap">
-      <label for="tokenInput">🔑 Token:</label>
+      <label for="tokenInput">Token</label>
       <input type="password" id="tokenInput"
              placeholder="ghp_... (optional)"
-             title="GitHub token — more requests per hour!">
-      <button onclick="saveToken()">💾 Save</button>
+             title="GitHub token — more requests per hour">
+      <button onclick="saveToken()">Save</button>
     </div>
-    <button id="muteBtn"  onclick="toggleMute()">🔊 Mute</button>
-    <button id="pauseBtn" onclick="togglePause()">⏸ Pause</button>
-    <button onclick="clearFeed()">🧹 Clear</button>
+    <button id="muteBtn"  onclick="toggleMute()">Mute</button>
+    <button id="pauseBtn" onclick="togglePause()">Pause</button>
+    <button onclick="clearFeed()">Clear</button>
   </div>
 </header>
 
-<!-- ── Status strip ─────────────────────────────────────────────────────────── -->
+<!-- ── Status strip ── -->
 <div class="statusbar">
-  <span><span class="dot" id="dot"></span><span id="statusTxt">Warming up the mic… 🎤</span></span>
-  <span>🗂 Events: <strong id="evtCount">0</strong></span>
-  <span>🗣 Words: <strong id="wrdCount">0</strong></span>
-  <span>📋 Queue: <strong id="qCount">0</strong></span>
-  <span>⚡ Rate: <strong id="rateLimit">—</strong></span>
-  <span>⏱ Next: <strong id="nextPoll">—</strong></span>
+  <span><span class="dot" id="dot"></span><span id="statusTxt">Starting…</span></span>
+  <span>Events: <strong id="evtCount">0</strong></span>
+  <span>Words: <strong id="wrdCount">0</strong></span>
+  <span>Queue: <strong id="qCount">0</strong></span>
+  <span>Rate: <strong id="rateLimit">—</strong></span>
+  <span>Next: <strong id="nextPoll">—</strong></span>
 </div>
 
-<!-- ── Karaoke stage ─────────────────────────────────────────────────────────── -->
+<!-- ── Karaoke stage ── -->
 <div class="stage">
-  <div class="stage-label">🎤 now speaking</div>
+  <div class="stage-label">now speaking</div>
   <div class="karaoke-text" id="karaokeText">
-    <span class="idle-msg">waiting for juicy commits… 👀</span>
+    <span class="idle-msg">waiting…</span>
   </div>
 </div>
 
-<!-- ── Event feed ────────────────────────────────────────────────────────────── -->
+<!-- ── Event feed ── -->
 <div class="feed" id="feed">
   <div class="empty-state" id="empty">
-    <h2>👂 Eavesdropping on GitHub…</h2>
+    <h2>Listening to GitHub</h2>
     <p>
-      Fetching public events from humans around the world.<br>
-      Their commit messages, pull requests, and rants about code<br>
-      will be dramatically read aloud. 🎭
+      Fetching public events from developers around the world.<br>
+      Commit messages, pull requests, and issue reports<br>
+      will be read aloud as they arrive.
     </p>
   </div>
 </div>
@@ -377,7 +292,7 @@ function saveToken() {
 function toggleMute() {
   muted = !muted;
   const b = document.getElementById('muteBtn');
-  b.textContent = muted ? '🔇 Unmute' : '🔊 Mute';
+  b.textContent = muted ? 'Unmute' : 'Mute';
   b.classList.toggle('on', muted);
   if (muted) { window.speechSynthesis.cancel(); speaking = false; waveOff(); showIdle(); }
   else        processQueue();
@@ -386,12 +301,12 @@ function toggleMute() {
 function togglePause() {
   paused = !paused;
   const b = document.getElementById('pauseBtn');
-  b.textContent = paused ? '▶ Resume' : '⏸ Pause';
+  b.textContent = paused ? 'Resume' : 'Pause';
   b.classList.toggle('on', paused);
   if (paused) {
     clearTimeout(pollTimer); clearInterval(cdTimer);
-    document.getElementById('nextPoll').textContent = 'chillin 😎';
-    setStatus('Taking a breather… 😮‍💨');
+    document.getElementById('nextPoll').textContent = 'paused';
+    setStatus('Paused');
   } else {
     restart();
   }
@@ -399,14 +314,14 @@ function togglePause() {
 
 function clearFeed() {
   document.getElementById('feed').innerHTML =
-    '<div class="empty-state"><h2>🧹 Swept clean!</h2><p>Feed is fresh. Fetching new drama…</p></div>';
+    '<div class="empty-state"><h2>Feed cleared</h2><p>Fetching new events…</p></div>';
   seenIds.clear();
 }
 
 // ── Status ─────────────────────────────────────────────────────────────────
 function setStatus(msg, err = false) {
   document.getElementById('statusTxt').textContent = msg;
-  document.getElementById('dot').style.background  = err ? '#ff6b6b' : '#26c6a6';
+  document.getElementById('dot').style.background  = err ? '#ef4444' : '#22c55e';
 }
 function refreshCounters() {
   document.getElementById('evtCount').textContent = evtTotal;
@@ -445,11 +360,11 @@ const isBot = (login) => !login ||
   login.endsWith('[bot]') || login.includes('dependabot') ||
   login.includes('renovate') || login.endsWith('-bot');
 
-// ── Fun event templates ────────────────────────────────────────────────────
-const PUSH_INTROS    = ['just yolo\'d:', 'bravely committed:', 'dropped:', 'snuck in:', 'coded:'];
-const ISSUE_INTROS   = ['is having a moment:', 'filed a complaint:', 'raised an eyebrow about:', 'cried out:'];
-const COMMENT_INTROS = ['had thoughts:', 'chimed in:', 'weighed in:', 'couldn\'t stay quiet:'];
-const PR_INTROS      = ['wants to merge some vibes:', 'is feeling PR-ish:', 'opened a conversation:'];
+// ── Event templates ────────────────────────────────────────────────────────
+const PUSH_INTROS    = ['committed:', 'pushed:', 'added:', 'merged:'];
+const ISSUE_INTROS   = ['opened an issue:', 'filed:', 'reported:'];
+const COMMENT_INTROS = ['commented:', 'replied:', 'noted:'];
+const PR_INTROS      = ['opened a PR:', 'proposed:', 'submitted:'];
 
 const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 
@@ -463,13 +378,12 @@ function parseEvent(ev) {
   const type    = ev.type;
   let   badge   = 'other';
   let   summary = '';
-  let   reaction = '✨';
   const texts   = [];
 
   switch (type) {
 
     case 'PushEvent': {
-      badge = 'push'; reaction = pick(['🚀','💾','⌨️','🏗️','🛠️']);
+      badge = 'push';
       const commits = (payload.commits || [])
         .filter(c => c.distinct !== false && c.message && !/^merge\b/i.test(c.message));
       for (const c of commits.slice(0, 3)) {
@@ -485,7 +399,7 @@ function parseEvent(ev) {
     }
 
     case 'IssuesEvent': {
-      badge = 'issue'; reaction = pick(['😱','🐛','🔥','💥','❓']);
+      badge = 'issue';
       const issue = payload.issue || {};
       if (payload.action === 'opened') {
         const title = clean(issue.title || '');
@@ -498,7 +412,7 @@ function parseEvent(ev) {
     }
 
     case 'IssueCommentEvent': {
-      badge = 'comment'; reaction = pick(['💬','🗣️','🤔','😤','🧐']);
+      badge = 'comment';
       if (payload.action === 'created') {
         const body  = words(clean(payload.comment?.body || ''), 25);
         const title = payload.issue?.title || '';
@@ -512,7 +426,7 @@ function parseEvent(ev) {
     }
 
     case 'PullRequestEvent': {
-      badge = 'pr'; reaction = pick(['🔀','🤝','🙏','🎯','🧪']);
+      badge = 'pr';
       const pr     = payload.pull_request || {};
       const action = payload.action;
       if (['opened', 'reopened'].includes(action)) {
@@ -522,15 +436,14 @@ function parseEvent(ev) {
         if (body)  texts.push({ speech: body, display: body });
       } else if (action === 'closed' && pr.merged) {
         const title = clean(pr.title || '');
-        if (title) texts.push({ speech: `${actor} shipped it! ${title}`, display: title });
-        reaction = '🎉';
+        if (title) texts.push({ speech: `${actor} merged: ${title}`, display: title });
       }
       summary = `${action} PR: ${pr.title || ''}`;
       break;
     }
 
     case 'PullRequestReviewCommentEvent': {
-      badge = 'comment'; reaction = '🔍';
+      badge = 'comment';
       if (payload.action === 'created') {
         const body = words(clean(payload.comment?.body || ''), 25);
         if (body) texts.push({ speech: `${actor} reviewed: ${body}`, display: body });
@@ -540,21 +453,21 @@ function parseEvent(ev) {
     }
 
     case 'CreateEvent': {
-      badge = 'create'; reaction = '🌱';
+      badge = 'create';
       const refType = payload.ref_type;
       const desc    = words(clean(payload.description || ''), 20);
       summary = payload.ref ? `created ${refType} ${payload.ref}` : `created ${refType}`;
       if (refType === 'repository' && desc)
-        texts.push({ speech: `${actor} just hatched a new repo: ${desc}`, display: desc });
+        texts.push({ speech: `${actor} created a new repo: ${desc}`, display: desc });
       break;
     }
 
     case 'ReleaseEvent': {
-      badge = 'release'; reaction = pick(['🎉','🚢','🎊','🏆']);
+      badge = 'release';
       const rel  = payload.release || {};
       const name = rel.name || rel.tag_name || '';
       const body = words(clean(rel.body || ''), 20);
-      if (name) texts.push({ speech: `${actor} shipped ${name}! Let's gooo!`, display: name });
+      if (name) texts.push({ speech: `${actor} released ${name}`, display: name });
       if (body) texts.push({ speech: body, display: body });
       summary = `released ${name}`;
       break;
@@ -568,7 +481,7 @@ function parseEvent(ev) {
       return null;
   }
 
-  return { actor, repo, type, badge, summary, texts, reaction, time: ev.created_at };
+  return { actor, repo, type, badge, summary, texts, time: ev.created_at };
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -589,12 +502,7 @@ const BADGE_LABELS = {
   PushEvent: 'push', IssuesEvent: 'issue',
   IssueCommentEvent: 'comment', PullRequestEvent: 'PR',
   PullRequestReviewCommentEvent: 'review',
-  CreateEvent: 'create', ReleaseEvent: '🚀 release',
-};
-const BADGE_CLASS = {
-  push:'b-push', issue:'b-issue', pr:'b-pr',
-  comment:'b-comment', review:'b-comment',
-  create:'b-create', release:'b-release', other:'b-other',
+  CreateEvent: 'create', ReleaseEvent: 'release',
 };
 
 // ── Add event card ─────────────────────────────────────────────────────────
@@ -604,23 +512,21 @@ function addCard(parsed, ev) {
 
   const login    = ev.actor?.login ?? '';
   const avatar   = `https://avatars.githubusercontent.com/${encodeURIComponent(login)}?size=64`;
-  const fallback = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><rect width="32" height="32" rx="16" fill="%23e8e0d5"/><text x="16" y="21" text-anchor="middle" font-size="14" fill="%23888">${encodeURIComponent((parsed.actor[0]||'?').toUpperCase())}</text></svg>`;
+  const fallback = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"><rect width="26" height="26" rx="13" fill="%23e2e2e2"/><text x="13" y="18" text-anchor="middle" font-size="12" fill="%23999">${encodeURIComponent((parsed.actor[0]||'?').toUpperCase())}</text></svg>`;
   const label    = BADGE_LABELS[parsed.type] || parsed.type.replace('Event','');
-  const bClass   = BADGE_CLASS[parsed.badge] || 'b-other';
 
   const displayText = parsed.texts.length
-    ? parsed.texts.map(t => escHtml(t.display)).join(' &middot; ')
+    ? parsed.texts.map(t => escHtml(t.display)).join(' · ')
     : `<span class="dim">${escHtml(parsed.summary)}</span>`;
 
   const card = document.createElement('div');
   card.className = 'card';
   card.dataset.id = ev.id;
   card.innerHTML = `
-    <div class="card-reaction" aria-hidden="true">${parsed.reaction}</div>
     <div class="card-left">
       <img class="avatar" src="${avatar}" alt="${escHtml(parsed.actor)}"
            onerror="this.src='${fallback}'">
-      <span class="badge ${bClass}">${escHtml(label)}</span>
+      <span class="badge">${escHtml(label)}</span>
     </div>
     <div class="card-body">
       <div class="card-meta">
@@ -639,11 +545,10 @@ function addCard(parsed, ev) {
 // ── Karaoke display ─────────────────────────────────────────────────────────
 function showIdle() {
   document.getElementById('karaokeText').innerHTML =
-    '<span class="idle-msg">waiting for juicy commits… 👀</span>';
+    '<span class="idle-msg">waiting…</span>';
 }
 
 function buildKaraokeHTML(text) {
-  // Split into tokens preserving spaces so charIndex maps correctly
   const tokens = text.split(/(\s+)/);
   let html = '';
   let pos  = 0;
@@ -697,7 +602,6 @@ function processQueue() {
   speaking = true;
   waveOn();
 
-  // Highlight card
   if (activeSpeakCard) activeSpeakCard.classList.remove('speaking');
   activeSpeakCard = card;
   if (card) {
@@ -705,7 +609,6 @@ function processQueue() {
     card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
-  // Build karaoke display
   document.getElementById('karaokeText').innerHTML = buildKaraokeHTML(text);
 
   wrdTotal += text.split(/\s+/).filter(Boolean).length;
@@ -767,17 +670,17 @@ async function fetchEvents() {
     if (etag) lastEtag = etag;
 
     if (res.status === 304) {
-      setStatus('No new gossip… yet 🕵️');
+      setStatus('No new events');
     } else if (!res.ok) {
       setStatus(
         res.status === 403
-          ? '😅 Rate limited! Add a GitHub token for more juice'
-          : `😬 API hiccup: ${res.status}`,
+          ? 'Rate limited — add a token for more quota'
+          : `API error: ${res.status}`,
         true
       );
     } else {
       const events = await res.json();
-      setStatus(`👂 Live · snooped at ${new Date().toLocaleTimeString()}`);
+      setStatus(`Live · ${new Date().toLocaleTimeString()}`);
 
       for (const ev of events) {
         if (seenIds.has(ev.id)) continue;
@@ -795,7 +698,7 @@ async function fetchEvents() {
     }
   } catch (err) {
     if (err.name !== 'AbortError')
-      setStatus(`🙈 Oops: ${err.message}`, true);
+      setStatus(`Error: ${err.message}`, true);
   }
 
   schedulePoll();
